@@ -1,0 +1,17 @@
+td {
+    width: 150px;
+  }
+  
+  .nopre {
+    background-color: lightblue;
+  }
+  
+  .withpre {
+    background-color: orange;
+    white-space: pre;
+  }
+  
+  .withprewrap {
+    /* background-color: lightgreen; */
+    white-space: pre-wrap;
+  }
