@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
-const Dashboard = ({ bidsData }) => {
+const Dashboard = ({ dataParentToChild }) => {
 
 
 
     return (
         <div>
             
-            ---------{console.log(bidsData)}
-            {bidsData}
+            ---------{console.log(dataParentToChild)}
+            {dataParentToChild}
         </div>
     )
 }

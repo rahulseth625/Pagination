@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import '../Css/Customer.css';
 import '../Css/Toggle.css';
@@ -30,7 +30,7 @@ const Customers = (props) => {
     });
 
     const classes = useStyles();
-    
+
     const [page, setPage] = useState(0);
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -45,13 +45,16 @@ const Customers = (props) => {
         setPage(0);
     };
 
-    const [bidsData, setBids] = useState();
+    const [bidsData, setBids] = useState([]);
 
-    const handleClick = (row) => {
-            setBids(row.bids);
+    const [isShow, setShow] = useState(false) 
+
+    var data = []
+    var handleClick = (row) => {
+        setBids(row.bids);
+        setShow(true)
+        data = row.bids
     }
-
-    //console.log (bids)
 
     const emptyRows =
         rowsPerPage - Math.min(rowsPerPage, customerList.data.length - page * rowsPerPage);
@@ -62,7 +65,6 @@ const Customers = (props) => {
             .then((response) => {
                 if (response.statusText === 'OK') {
                     setCustomerList(response);
-                    //setBids(row);
                 } else {
                     return alert('something went wrong');
                 }
@@ -81,15 +83,13 @@ const Customers = (props) => {
 
     const toggleSelected = () => {
         setSelected(!selected);
-        // setCustomerList({
-        //     data: Array.prototype.reverse.call(customerList.data)
-        // })
     }
 
+    const mounted = useRef();
 
     useEffect(() => {
         customerLists();
-        //handleClick();
+        setBids(data);
     }, []
     )
 
@@ -117,10 +117,10 @@ const Customers = (props) => {
                         {customerList.data
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row, index) => (
-                                <TableRow key={index} 
+                                <TableRow key={index}
                                     component={Link} to="/dashboard"
                                     onClick={() => handleClick(row)}
-                                    >
+                                >
                                     <TableCell component="th" scope="row" className="withprewrap">
                                         {row.firstname} {row.lastname}
                                         {'\n'}
@@ -152,8 +152,7 @@ const Customers = (props) => {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </TableContainer>
-            {/* {console.log(bids)} */}
-            <Dashboard bidsData={bidsData} />
+            { isShow ? <Dashboard dataParentToChild={bidsData} /> : null }
         </div>
     )
 }
